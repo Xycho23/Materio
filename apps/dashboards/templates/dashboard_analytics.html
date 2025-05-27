@@ -296,24 +296,36 @@
   <!-- Detailed Statistics -->
   <div class="col-12">
     <div class="card">
-      <div class="card-header">
-        <h5 class="card-title mb-0">Detailed Statistics</h5>
+      <div class="card-header d-flex justify-content-between align-items-center">
+        <h5 class="card-title mb-0">
+          <i class="ri-bar-chart-box-line me-2"></i>Detailed Statistics
+        </h5>
+        <button class="btn btn-primary btn-sm">
+          <i class="ri-download-line me-1"></i>Export Data
+        </button>
       </div>
       <div class="card-body">
-        <div class="row">
+        <div class="row g-4">
           <!-- Location Statistics -->
           <div class="col-md-6 col-lg-3">
-            <div class="card">
-              <div class="card-header">
-                <h5 class="card-title">Locations</h5>
+            <div class="card shadow-sm h-100">
+              <div class="card-header border-bottom">
+                <h6 class="card-title mb-0">
+                  <i class="ri-map-pin-line me-2"></i>Locations
+                </h6>
               </div>
               <div class="card-body">
                 {% for stat in location_stats %}
-                <div class="d-flex justify-content-between mb-2">
-                  <div>{{ stat.region }}</div>
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                  <div class="d-flex align-items-center">
+                    <span class="avatar-initial rounded-circle bg-label-primary me-2" style="width: 28px; height: 28px">
+                      {{ stat.region|slice:":2"|upper }}
+                    </span>
+                    <span>{{ stat.region }}</span>
+                  </div>
                   <div>
-                    <span class="badge bg-primary">{{ stat.shelter_count }} shelters</span>
-                    <span class="badge bg-info">{{ stat.pet_count }} pets</span>
+                    <span class="badge bg-label-primary me-1">{{ stat.shelter_count }} shelters</span>
+                    <span class="badge bg-label-info">{{ stat.pet_count }} pets</span>
                   </div>
                 </div>
                 {% endfor %}
@@ -323,15 +335,22 @@
 
           <!-- Shelter Statistics -->
           <div class="col-md-6 col-lg-3">
-            <div class="card">
-              <div class="card-header">
-                <h5 class="card-title">Top Shelters</h5>
+            <div class="card shadow-sm h-100">
+              <div class="card-header border-bottom">
+                <h6 class="card-title mb-0">
+                  <i class="ri-building-line me-2"></i>Top Shelters
+                </h6>
               </div>
               <div class="card-body">
                 {% for shelter in shelter_stats|slice:":5" %}
-                <div class="d-flex justify-content-between mb-2">
-                  <div>{{ shelter.name }}</div>
-                  <div>{{ shelter.total_pets }} pets</div>
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                  <div class="d-flex align-items-center">
+                    <span class="avatar-initial rounded-circle bg-label-success me-2" style="width: 28px; height: 28px">
+                      {{ shelter.name|slice:":2"|upper }}
+                    </span>
+                    <span>{{ shelter.name }}</span>
+                  </div>
+                  <span class="badge bg-label-success">{{ shelter.total_pets }} pets</span>
                 </div>
                 {% endfor %}
               </div>
@@ -340,15 +359,20 @@
 
           <!-- Pet Statistics -->
           <div class="col-md-6 col-lg-3">
-            <div class="card">
-              <div class="card-header">
-                <h5 class="card-title">Pet Types</h5>
+            <div class="card shadow-sm h-100">
+              <div class="card-header border-bottom">
+                <h6 class="card-title mb-0">
+                  <i class="ri-heart-line me-2"></i>Pet Types
+                </h6>
               </div>
               <div class="card-body">
                 {% for type in pet_stats.by_type %}
-                <div class="d-flex justify-content-between mb-2">
-                  <div>{{ type.type }}</div>
-                  <div>{{ type.count }}</div>
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                  <div class="d-flex align-items-center">
+                    <i class="ri-{{ type.type|lower }}-line me-2 text-primary"></i>
+                    <span>{{ type.type }}</span>
+                  </div>
+                  <span class="badge bg-label-info">{{ type.count }}</span>
                 </div>
                 {% endfor %}
               </div>
@@ -357,26 +381,40 @@
 
           <!-- Adoption Statistics -->
           <div class="col-md-6 col-lg-3">
-            <div class="card">
-              <div class="card-header">
-                <h5 class="card-title">Adoption Status</h5>
+            <div class="card shadow-sm h-100">
+              <div class="card-header border-bottom">
+                <h6 class="card-title mb-0">
+                  <i class="ri-user-heart-line me-2"></i>Adoption Status
+                </h6>
               </div>
               <div class="card-body">
-                <div class="d-flex justify-content-between mb-2">
-                  <div>Total Applications</div>
-                  <div>{{ adoption_stats.total }}</div>
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                  <div class="d-flex align-items-center">
+                    <i class="ri-file-list-line me-2 text-primary"></i>
+                    <span>Total Applications</span>
+                  </div>
+                  <span class="badge bg-label-primary">{{ adoption_stats.total }}</span>
                 </div>
-                <div class="d-flex justify-content-between mb-2">
-                  <div>Approved</div>
-                  <div>{{ adoption_stats.approved }}</div>
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                  <div class="d-flex align-items-center">
+                    <i class="ri-check-line me-2 text-success"></i>
+                    <span>Approved</span>
+                  </div>
+                  <span class="badge bg-label-success">{{ adoption_stats.approved }}</span>
                 </div>
-                <div class="d-flex justify-content-between mb-2">
-                  <div>Pending</div>
-                  <div>{{ adoption_stats.pending }}</div>
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                  <div class="d-flex align-items-center">
+                    <i class="ri-time-line me-2 text-warning"></i>
+                    <span>Pending</span>
+                  </div>
+                  <span class="badge bg-label-warning">{{ adoption_stats.pending }}</span>
                 </div>
-                <div class="d-flex justify-content-between">
-                  <div>This Month</div>
-                  <div>{{ adoption_stats.this_month }}</div>
+                <div class="d-flex justify-content-between align-items-center">
+                  <div class="d-flex align-items-center">
+                    <i class="ri-calendar-line me-2 text-info"></i>
+                    <span>This Month</span>
+                  </div>
+                  <span class="badge bg-label-info">{{ adoption_stats.this_month }}</span>
                 </div>
               </div>
             </div>
