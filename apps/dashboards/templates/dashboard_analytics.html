@@ -1,0 +1,389 @@
+{% extends layout_path %}
+
+{% load static %}
+{% load i18n %}
+
+{% block title %}Dashboard - Philippine Pet Adoption Analytics{% endblock title %}
+
+{% block vendor_css %}
+{{ block.super }}
+<link rel="stylesheet" href="{% static 'vendor/libs/apex-charts/apex-charts.css' %}" />
+{% endblock vendor_css %}
+
+{% block vendor_js %}
+{{ block.super }}
+<script src="{% static 'vendor/libs/apex-charts/apexcharts.js' %}"></script>
+{% endblock vendor_js %}
+
+{% block page_js %}
+{{ block.super }}
+<script src="{% static 'js/dashboards-analytics.js' %}"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // Adoption trend chart
+    const adoptionChartOptions = {
+        series: [{
+            name: 'Adoptions',
+            data: {{ monthly_adoptions|safe }}
+        }],
+        chart: {
+            height: 250,
+            type: 'area',
+            toolbar: { show: false }
+        },
+        xaxis: {
+            categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+        },
+        tooltip: {
+            y: {
+                formatter: function(val) {
+                    return val + " adoptions"
+                }
+            }
+        }
+    };
+    const adoptionChart = new ApexCharts(document.querySelector("#adoptionChart"), adoptionChartOptions);
+    adoptionChart.render();
+
+    // Pet types chart
+    const petTypesChartOptions = {
+      series: [{% for type in pet_types %}{{ type.count }}{% if not forloop.last %},{% endif %}{% endfor %}],
+      labels: [{% for type in pet_types %}"{{ type.type }}"{% if not forloop.last %},{% endif %}{% endfor %}],
+      chart: {
+        type: 'donut',
+        height: 250
+      }
+    };
+    const petTypesChart = new ApexCharts(document.querySelector("#petTypesChart"), petTypesChartOptions);
+    petTypesChart.render();
+  });
+</script>
+{% endblock page_js %}
+
+{% block content %}
+<div class="row gy-4">
+  <!-- Philippine Pet Adoption Overview -->
+  <div class="col-md-12 col-lg-4">
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">Pet Management Overview 🐾</h5>
+        <div class="d-flex align-items-center mb-4">
+          <h4 class="mb-0 me-2">{{ total_adoptions }}</h4>
+          <small class="text-{% if adoption_rate >= 0 %}success{% else %}danger{% endif %}">
+            <i class="ri-arrow-{% if adoption_rate >= 0 %}up{% else %}down{% endif %}-s-line"></i>
+            {{ adoption_rate }}% this month
+          </small>
+        </div>
+        <div class="d-grid gap-2">
+          <a href="{% url 'admin:pets_pet_changelist' %}" class="btn btn-primary">
+            <i class="ri-list-check me-2"></i>Manage Pets
+          </a>
+          <a href="{% url 'admin:pets_adoption_changelist' %}" class="btn btn-info">
+            <i class="ri-file-list-line me-2"></i>View Adoptions
+          </a>
+          <a href="{% url 'admin:pets_shelter_changelist' %}" class="btn btn-secondary">
+            <i class="ri-building-line me-2"></i>Manage Shelters
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Regional Statistics -->
+  <div class="col-md-8">
+    <div class="card h-100">
+      <div class="card-header">
+        <h5 class="card-title mb-0">Regional Statistics</h5>
+      </div>
+      <div class="card-body">
+        <div class="row g-3">
+          <div class="col-sm-6 col-md-3">
+            <div class="d-flex align-items-center gap-2">
+              <div class="badge rounded-pill bg-label-primary p-2">
+                <i class="ri-map-pin-line"></i>
+              </div>
+              <div>
+                <h6 class="mb-0">{{ ncr_pets }}</h6>
+                <small>NCR</small>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-6 col-md-3">
+            <div class="d-flex align-items-center gap-2">
+              <div class="badge rounded-pill bg-label-success p-2">
+                <i class="ri-map-pin-line"></i>
+              </div>
+              <div>
+                <h6 class="mb-0">{{ luzon_pets }}</h6>
+                <small>Luzon</small>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-6 col-md-3">
+            <div class="d-flex align-items-center gap-2">
+              <div class="badge rounded-pill bg-label-warning p-2">
+                <i class="ri-map-pin-line"></i>
+              </div>
+              <div>
+                <h6 class="mb-0">{{ visayas_pets }}</h6>
+                <small>Visayas</small>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-6 col-md-3">
+            <div class="d-flex align-items-center gap-2">
+              <div class="badge rounded-pill bg-label-info p-2">
+                <i class="ri-map-pin-line"></i>
+              </div>
+              <div>
+                <h6 class="mb-0">{{ mindanao_pets }}</h6>
+                <small>Mindanao</small>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div id="adoptionChart" class="mt-4"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Local Shelter Overview -->
+  <div class="col-md-6 col-lg-4">
+    <div class="card h-100">
+      <div class="card-header">
+        <h5 class="card-title mb-0">Shelter Overview</h5>
+      </div>
+      <div class="card-body">
+        <ul class="p-0 m-0">
+          {% for shelter in local_shelters %}
+          <li class="d-flex mb-3">
+            <div class="avatar me-3">
+              <span class="avatar-initial rounded bg-label-info">
+                <i class="ri-building-line"></i>
+              </span>
+            </div>
+            <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
+              <div class="me-2">
+                <h6 class="mb-0">{{ shelter.name }}</h6>
+                <small>{{ shelter.city }}, {{ shelter.region }}</small>
+              </div>
+              <div class="user-progress">
+                <small>{{ shelter.total_pet_count }} pets</small>
+              </div>
+            </div>
+          </li>
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Recent Adoptions -->
+  <div class="col-md-6 col-lg-4">
+    <div class="card h-100">
+      <div class="card-header">
+        <h5 class="card-title mb-0">Recent Adoptions</h5>
+      </div>
+      <div class="card-body">
+        <ul class="p-0 m-0">
+          {% for adoption in recent_adoptions %}
+          <li class="d-flex mb-3">
+            <div class="avatar me-3">
+              <span class="avatar-initial rounded bg-label-primary">
+                <i class="ri-user-heart-line"></i>
+              </span>
+            </div>
+            <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
+              <div class="me-2">
+                <h6 class="mb-0">{{ adoption.pet.name }}</h6>
+                <small>Adopted by {{ adoption.adopter_name }}</small>
+              </div>
+              <small class="text-muted">{{ adoption.approved_date|date:"M d" }}</small>
+            </div>
+          </li>
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Pet Types Distribution -->
+  <div class="col-md-6 col-lg-4">
+    <div class="card h-100">
+      <div class="card-header">
+        <h5 class="card-title mb-0">Pet Types</h5>
+      </div>
+      <div class="card-body">
+        <div id="petTypesChart"></div>
+        <div class="text-center pt-3">
+          <div class="row">
+            {% for type_stat in pet_types %}
+            <div class="col-4">
+              <div class="d-flex flex-column">
+                <h6 class="mb-0">{{ type_stat.count }}</h6>
+                <small>{{ type_stat.type }}</small>
+              </div>
+            </div>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Recent Applications -->
+  <div class="col-12">
+    <div class="card">
+      <div class="card-header">
+        <h5 class="card-title mb-0">Recent Adoption Applications</h5>
+      </div>
+      <div class="table-responsive">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Pet</th>
+              <th>Adopter</th>
+              <th>Contact</th>
+              <th>Status</th>
+              <th>Date</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for application in recent_applications %}
+            <tr>
+              <td>
+                <div class="d-flex align-items-center">
+                  <div class="avatar me-2">
+                    <span class="avatar-initial rounded bg-label-{{ application.pet.type }}">
+                      {{ application.pet.type.0|upper }}
+                    </span>
+                  </div>
+                  <div>{{ application.pet.name }}</div>
+                </div>
+              </td>
+              <td>{{ application.adopter_name }}</td>
+              <td>{{ application.adopter_phone }}</td>
+              <td>
+                <span class="badge bg-label-{{ application.get_status_color }}">
+                  {{ application.get_status_display }}
+                </span>
+              </td>
+              <td>{{ application.application_date|date:"M j, Y" }}</td>
+              <td>
+                <div class="dropdown">
+                  <button class="btn p-0" type="button" data-bs-toggle="dropdown">
+                    <i class="ri-more-2-fill"></i>
+                  </button>
+                  <div class="dropdown-menu dropdown-menu-end">
+                    <!-- Remove or comment out the admin URLs until they're properly set up -->
+                    <!--
+                    <a class="dropdown-item" href="{% url 'admin:pets_adoption_change' application.id %}">
+                      <i class="ri-edit-line me-2"></i>Review
+                    </a>
+                    -->
+                  </div>
+                </div>
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- Detailed Statistics -->
+  <div class="col-12">
+    <div class="card">
+      <div class="card-header">
+        <h5 class="card-title mb-0">Detailed Statistics</h5>
+      </div>
+      <div class="card-body">
+        <div class="row">
+          <!-- Location Statistics -->
+          <div class="col-md-6 col-lg-3">
+            <div class="card">
+              <div class="card-header">
+                <h5 class="card-title">Locations</h5>
+              </div>
+              <div class="card-body">
+                {% for stat in location_stats %}
+                <div class="d-flex justify-content-between mb-2">
+                  <div>{{ stat.region }}</div>
+                  <div>
+                    <span class="badge bg-primary">{{ stat.shelter_count }} shelters</span>
+                    <span class="badge bg-info">{{ stat.pet_count }} pets</span>
+                  </div>
+                </div>
+                {% endfor %}
+              </div>
+            </div>
+          </div>
+
+          <!-- Shelter Statistics -->
+          <div class="col-md-6 col-lg-3">
+            <div class="card">
+              <div class="card-header">
+                <h5 class="card-title">Top Shelters</h5>
+              </div>
+              <div class="card-body">
+                {% for shelter in shelter_stats|slice:":5" %}
+                <div class="d-flex justify-content-between mb-2">
+                  <div>{{ shelter.name }}</div>
+                  <div>{{ shelter.total_pets }} pets</div>
+                </div>
+                {% endfor %}
+              </div>
+            </div>
+          </div>
+
+          <!-- Pet Statistics -->
+          <div class="col-md-6 col-lg-3">
+            <div class="card">
+              <div class="card-header">
+                <h5 class="card-title">Pet Types</h5>
+              </div>
+              <div class="card-body">
+                {% for type in pet_stats.by_type %}
+                <div class="d-flex justify-content-between mb-2">
+                  <div>{{ type.type }}</div>
+                  <div>{{ type.count }}</div>
+                </div>
+                {% endfor %}
+              </div>
+            </div>
+          </div>
+
+          <!-- Adoption Statistics -->
+          <div class="col-md-6 col-lg-3">
+            <div class="card">
+              <div class="card-header">
+                <h5 class="card-title">Adoption Status</h5>
+              </div>
+              <div class="card-body">
+                <div class="d-flex justify-content-between mb-2">
+                  <div>Total Applications</div>
+                  <div>{{ adoption_stats.total }}</div>
+                </div>
+                <div class="d-flex justify-content-between mb-2">
+                  <div>Approved</div>
+                  <div>{{ adoption_stats.approved }}</div>
+                </div>
+                <div class="d-flex justify-content-between mb-2">
+                  <div>Pending</div>
+                  <div>{{ adoption_stats.pending }}</div>
+                </div>
+                <div class="d-flex justify-content-between">
+                  <div>This Month</div>
+                  <div>{{ adoption_stats.this_month }}</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
