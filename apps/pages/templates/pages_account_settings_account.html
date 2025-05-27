@@ -1,9 +1,14 @@
-{% extends layout_path %}
+{% extends "base.html" %}  
 
 {% load static %}
 {% load i18n %}
 
 {% block title %}Account settings - Account{% endblock %}
+
+{% block page_css %}
+{{ block.super }}
+<link rel="stylesheet" href="{% static 'css/pages/page-account-settings.css' %}">
+{% endblock page_css %}
 
 {% block page_js %}
 {{ block.super }}
@@ -45,13 +50,13 @@
           <div class="row mt-1 g-5">
             <div class="col-md-6">
               <div class="form-floating form-floating-outline">
-                <input class="form-control" type="text" id="firstName" name="firstName" value="John" autofocus />
+                <input class="form-control" type="text" id="firstName" name="firstName" value="Toni Rose" autofocus />
                 <label for="firstName">First Name</label>
               </div>
             </div>
             <div class="col-md-6">
               <div class="form-floating form-floating-outline">
-                <input class="form-control" type="text" name="lastName" id="lastName" value="Doe" />
+                <input class="form-control" type="text" name="lastName" id="lastName" value="Correa" />
                 <label for="lastName">Last Name</label>
               </div>
             </div>

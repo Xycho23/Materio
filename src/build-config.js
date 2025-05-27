@@ -16,18 +16,18 @@ module.exports = {
 
     // Base Path to Serve from using Browser Sync, Currently set to root of the project
     // You can also point to specific folder like 'build/'
-    serverPath: './',
+    serverPath: '../static/',
 
     // Template/Folder to build for production
     buildTemplatePath: 'html',
 
     // Folder for production build
-    buildPath: './build'
+    buildPath: '../static'
   },
   development: {
     // Build path can be both relative or absolute.
     // Current dist path is `./assets/vendor` which will be used by templates from `html\` directory. Set distPath: './dist' to generate assets in dist folder.
-    distPath: './assets/vendor',
+    distPath: '../static/vendor',
 
     // Minify assets.
     minify: false,
@@ -46,7 +46,7 @@ module.exports = {
   production: {
     // Build path can be both relative or absolute.
     // Current dist path is `./assets/vendor` which will be used by templates from `html\` directory. Set distPath: './dist' to generate assets in dist folder.
-    distPath: './assets/vendor',
+    distPath: '../static/vendor',
 
     // Minify assets.
     // Note: Webpack will minify js sources in production mode regardless to this option

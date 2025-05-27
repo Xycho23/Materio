@@ -101,6 +101,7 @@ $clamp-numbers: (
   text-decoration: none !important;
   font-size: $ui-star-size;
   line-height: 1;
+  -webkit-user-select: none;
   user-select: none;
 
   & + & {

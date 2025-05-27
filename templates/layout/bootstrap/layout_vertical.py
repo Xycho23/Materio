@@ -1,3 +1,4 @@
+from django.template.loader import render_to_string
 from web_project.template_helpers.theme import TemplateHelper
 
 """
@@ -7,6 +8,14 @@ The init() function will be called in web_project/__init__.py
 
 
 class TemplateBootstrapLayoutVertical:
+    def __init__(self):
+        self.template_name = 'layout/vertical.html'
+    
+    def render(self, request, context=None):
+        if context is None:
+            context = {}
+        return render_to_string(self.template_name, context, request=request)
+
     def init(context):
         context.update(
             {

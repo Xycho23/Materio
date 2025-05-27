@@ -54,7 +54,8 @@ const webpackConfig = {
   output: {
     path: conf.distPath,
     filename: '[name].js',
-    libraryTarget: 'umd'
+    libraryTarget: 'umd',
+    publicPath: '/static/vendor/'
   },
   module: {
     rules: [

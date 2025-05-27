@@ -99,6 +99,25 @@
   .action-btn:hover {
     background-color: var(--bs-light);
   }
+  
+  .status-filter .dropdown-item {
+    display: flex;
+    align-items: center;
+    padding: 0.5rem 1rem;
+    gap: 0.5rem;
+  }
+  
+  .status-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    display: inline-block;
+  }
+  
+  .status-approved { background-color: var(--bs-success); }
+  .status-pending { background-color: var(--bs-warning); }
+  .status-rejected { background-color: var(--bs-danger); }
+  .status-all { background-color: var(--bs-primary); }
 </style>
 {% endblock %}
 
@@ -287,9 +306,29 @@
           <button class="btn btn-primary btn-sm">
             <i class="ri-add-line me-1"></i>New Application
           </button>
-          <button class="btn btn-outline-secondary btn-sm">
-            <i class="ri-filter-3-line me-1"></i>Filter
-          </button>
+          <div class="dropdown">
+            <button class="btn btn-outline-secondary btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown">
+              <i class="ri-filter-3-line me-1"></i>Status Filter
+            </button>
+            <div class="dropdown-menu status-filter">
+              <a class="dropdown-item" href="#">
+                <span class="status-dot status-all"></span>
+                All Applications
+              </a>
+              <a class="dropdown-item" href="#">
+                <span class="status-dot status-approved"></span>
+                Approved
+              </a>
+              <a class="dropdown-item" href="#">
+                <span class="status-dot status-pending"></span>
+                Pending
+              </a>
+              <a class="dropdown-item" href="#">
+                <span class="status-dot status-rejected"></span>
+                Rejected
+              </a>
+            </div>
+          </div>
         </div>
       </div>
       <div class="table-responsive">

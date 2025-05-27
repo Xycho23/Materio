@@ -1,7 +1,4 @@
-{% load static %}
 {% load theme_tags %}
-{% get_theme_variables as theme %}
-{% load materio_tags %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -9,32 +6,32 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}{% endblock %}</title>
     
+    <script>
+        window.themeConfig = {{ get_theme_variables|safe }};
+    </script>
+
     <!-- Theme CSS -->
     <link rel="stylesheet" href="{{ STATIC_URL }}vendor/css/core.css">
     <link rel="stylesheet" href="{{ STATIC_URL }}vendor/css/theme-default.css">
+    <!-- Vendors CSS -->
     <link rel="stylesheet" href="{{ STATIC_URL }}vendor/libs/node-waves/node-waves.css">
-    <link rel="stylesheet" href="{{ STATIC_URL }}vendor/libs/perfect-scrollbar/perfect-scrollbar.css">
-    <link rel="stylesheet" href="{{ STATIC_URL }}vendor/libs/apex-charts/apex-charts.css">
+    <link rel="stylesheet" href="{{ STATIC_URL }}vendor/fonts/remixicon/remixicon.css" />
+    <link rel="stylesheet" href="{{ STATIC_URL }}vendor/libs/perfect-scrollbar/perfect-scrollbar.css" />
+    <link rel="stylesheet" href="{{ STATIC_URL }}vendor/libs/apex-charts/apex-charts.css" />
+    {% get_theme_variables as theme %}
 </head>
 <body>
-    <div class="layout-wrapper layout-content-navbar">
-        <div class="layout-container">
-            {% block content %}{% endblock %}
-        </div>
-    </div>
+    {% block content %}{% endblock %}
 
-    <!-- Core JS -->
+    <!-- Vendor JS -->
     <script src="{{ STATIC_URL }}vendor/libs/jquery/jquery.js"></script>
     <script src="{{ STATIC_URL }}vendor/libs/popper/popper.js"></script>
     <script src="{{ STATIC_URL }}vendor/js/bootstrap.js"></script>
     <script src="{{ STATIC_URL }}vendor/libs/node-waves/node-waves.js"></script>
     <script src="{{ STATIC_URL }}vendor/libs/perfect-scrollbar/perfect-scrollbar.js"></script>
     <script src="{{ STATIC_URL }}vendor/js/menu.js"></script>
-    
-    <!-- Vendors JS -->
     <script src="{{ STATIC_URL }}vendor/libs/apex-charts/apexcharts.js"></script>
-    
-    <!-- Main JS -->
-    <script src="{{ STATIC_URL }}js/main.js"></script>
+    <script src="{{ STATIC_URL }}vendor/js/helpers.js"></script>
+    <script src="{{ STATIC_URL }}js/config.js"></script>
 </body>
 </html>

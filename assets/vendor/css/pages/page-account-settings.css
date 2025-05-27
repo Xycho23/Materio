@@ -1,0 +1,31 @@
+.api-key-actions {
+  position: absolute !important;
+  top: 0.75rem;
+  right: 0.5rem;
+}
+
+.account-settings-wrapper .nav-align-top {
+  background: #fff;
+  border-radius: 0.375rem;
+}
+.account-settings-wrapper .nav-align-top .nav-pills {
+  background-color: transparent;
+}
+.account-settings-wrapper .nav-align-top .nav-pills .nav-link {
+  color: #6d6777;
+}
+.account-settings-wrapper .nav-align-top .nav-pills .nav-link.active {
+  background-color: #8c57ff;
+  color: #fff;
+}
+.account-settings-wrapper .card {
+  margin-bottom: 1.5rem;
+}
+
+.account-file-input:hover {
+  cursor: pointer;
+}
+
+.form-floating.form-floating-outline label {
+  background: #fff;
+}

@@ -11,3 +11,44 @@
     right: 0.5rem;
   }
 }
+
+// Account settings styles
+.account-settings-wrapper {
+  .nav-align-top {
+    background: $card-bg;
+    border-radius: $card-border-radius;
+
+    .nav-pills {
+      background-color: transparent;
+
+      .nav-link {
+        color: $body-color;
+
+        &.active {
+          background-color: $primary;
+          color: $white;
+        }
+      }
+    }
+  }
+
+  .card {
+    margin-bottom: $grid-gutter-width;
+  }
+}
+
+// Upload photo styles
+.account-file-input {
+  &:hover {
+    cursor: pointer;
+  }
+}
+
+// Form fields
+.form-floating {
+  &.form-floating-outline {
+    label {
+      background: $card-bg;
+    }
+  }
+}
